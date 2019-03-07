@@ -22,10 +22,11 @@ RUN yarn build
 # Clear the cache
 RUN yarn cache clean
 
-EXPOSE 4000
+EXPOSE 3000
 CMD [ "yarn", "start", "--hostname", "0.0.0.0"]
 
 # docker build --no-cache -t blob-express .
-# docker stop blob-express ; docker run -d --rm -it -p 3022:4000 --name blob-express blob-express
+# docker stop blob-express ; docker run -d --rm -it -p 3012:3000 --name blob-express blob-express
 # docker exec -it blob-express /bin/bash
 # docker logs --follow blob-express
+# mechanic add blob-express '--host=blob.gly.sh' '--backends=localhost:3012' '--canonical=true' '--https=true' '--redirect-to-https=true'
