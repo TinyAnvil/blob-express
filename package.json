@@ -15,7 +15,6 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
-    "puppeteer": "^1.13.0",
     "randomcolor": "^0.5.4"
   },
   "devDependencies": {
@@ -25,6 +24,7 @@
     "@babel/plugin-syntax-object-rest-spread": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "puppeteer": "^1.13.0",
     "nodemon": "^1.18.9",
     "rimraf": "^2.6.3"
   }
