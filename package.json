@@ -1,0 +1,28 @@
+{
+  "name": "blob-express",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon ./build/app.js",
+    "build": "rimraf dist && babel ./build --out-dir dist --ignore yarn.lock,package-lock.json,package.json,node_modules",
+    "start": "node --trace-warnings ./dist/app.js"
+  },
+  "dependencies": {
+    "blobs": "^1.0.3",
+    "body-parser": "^1.18.3",
+    "convert-svg-to-png": "^0.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-syntax-object-rest-spread": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "nodemon": "^1.18.9",
+    "rimraf": "^2.6.3"
+  }
+}
