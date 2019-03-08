@@ -2,6 +2,7 @@ import _ from 'lodash'
 import blobs from 'blobs'
 import { convert } from 'convert-svg-to-png'
 import randomcolor from 'randomcolor'
+import shajs from 'sha.js'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -12,7 +13,7 @@ export default async function(req, res, next) {
   const subtitle = req.query.subtitle
 
   _.each(_.range(2), (i) => {
-    const seed = req.query.seed ? req.query.seed + i : null
+    const seed = shajs('sha256').update(req.query.seed + i).digest('hex')
 
     let blob = blobs({
       size: 1200,
@@ -84,9 +85,9 @@ export default async function(req, res, next) {
     </text>
   `
 
-  if (req.query.format === 'svg') {
-    svg = `<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
+  svg = `<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
 
+  if (req.query.format === 'svg') {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
@@ -97,7 +98,7 @@ export default async function(req, res, next) {
   }
 
   else {
-    const png = await convert(`<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`, {
+    const png = await convert(svg, {
       background: 'white',
       puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
