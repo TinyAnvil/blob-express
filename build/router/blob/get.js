@@ -3,6 +3,8 @@ import blobs from 'blobs'
 import { convert } from 'convert-svg-to-png'
 import randomcolor from 'randomcolor'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export default async function(req, res, next) {
   let svg = ''
 
@@ -26,7 +28,11 @@ export default async function(req, res, next) {
         width: 0
       },
       seed,
-      guides: false
+      guides: false,
+      puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        executablePath: isDev ? undefined : '/usr/bin/chromium-browser'
+      }
     })
 
     blob = blob
