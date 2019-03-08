@@ -13,7 +13,7 @@ export default async function(req, res, next) {
   const subtitle = req.query.subtitle
 
   _.each(_.range(2), (i) => {
-    const seed = shajs('sha256').update(req.query.seed + i).digest('hex')
+    const seed = req.query.seed ? shajs('sha256').update(req.query.seed + i).digest('hex') : null
 
     let blob = blobs({
       size: 1200,
