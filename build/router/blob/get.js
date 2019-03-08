@@ -11,17 +11,17 @@ export default async function(req, res, next) {
   const title = req.query.title
   const subtitle = req.query.subtitle
 
-  _.each(_.range(3), (i) => {
+  _.each(_.range(2), (i) => {
     const seed = req.query.seed ? req.query.seed + i : null
 
     let blob = blobs({
-      size: 600,
-      complexity: 0.3,
-      contrast: 0.4,
+      size: 1200,
+      complexity: 0.4,
+      contrast: 0.6,
       color: randomcolor({
         seed,
         format: 'rgba',
-        alpha: 1 / 3
+        alpha: 1 / 2
       }),
       stroke: {
         color: 'none',
@@ -37,16 +37,16 @@ export default async function(req, res, next) {
 
     switch (i) {
       case 0:
-      blob = `<g transform="translate(-50, -50)"> ${blob} </g>`
+      blob = `<g transform="translate(-500, -500)"> ${blob} </g>`
       break;
 
       case 1:
-      blob = `<g transform="translate(150, -50)"> ${blob} </g>`
+      blob = `<g transform="translate(100, -100)"> ${blob} </g>`
       break;
 
-      case 2:
-      blob = `<g transform="translate(50, 150)"> ${blob} </g>`
-      break;
+      // case 2:
+      // blob = `<g transform="translate(50, 150)"> ${blob} </g>`
+      // break;
     }
 
     svg += blob
@@ -84,19 +84,33 @@ export default async function(req, res, next) {
     </text>
   `
 
-  const png = await convert(`<svg width="800" height="800" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`, {
-    background: 'white',
-    puppeteer: {
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-      executablePath: isDev ? undefined : '/usr/bin/chromium-browser'
-    }
-  })
+  if (req.query.format === 'svg') {
+    svg = `<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
 
-  res.writeHead(200, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,
-    'Content-Type': 'image/png',
-    'Content-Length': png.length
-  })
-  res.end(png)
+    res.writeHead(200, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      'Content-Type': 'image/svg+xml',
+      'Content-Length': svg.length
+    })
+    res.end(svg)
+  }
+
+  else {
+    const png = await convert(`<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`, {
+      background: 'white',
+      puppeteer: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        executablePath: isDev ? undefined : '/usr/bin/chromium-browser'
+      }
+    })
+
+    res.writeHead(200, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      'Content-Type': 'image/png',
+      'Content-Length': png.length
+    })
+    res.end(png)
+  }
 }
