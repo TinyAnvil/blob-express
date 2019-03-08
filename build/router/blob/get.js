@@ -104,7 +104,7 @@ export default async function(req, res, next) {
   if (req.url.indexOf('.svg') !== -1) {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
+      'Cache-Control': 'public, max-age=31536000',
       'Content-Type': 'image/svg+xml',
       'Content-Length': svg.length
     })
@@ -122,7 +122,7 @@ export default async function(req, res, next) {
 
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
+      'Cache-Control': 'public, max-age=31536000',
       'Content-Type': 'image/png',
       'Content-Length': png.length
     })
