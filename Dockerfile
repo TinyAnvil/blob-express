@@ -32,7 +32,7 @@ EXPOSE 3000
 CMD [ "yarn", "start", "--hostname", "0.0.0.0"]
 
 # docker build --no-cache -t blob-express .
-# docker stop blob-express ; docker run -d -i --rm -it -p 3026:3000 --cap-add=SYS_ADMIN --name blob-express blob-express
-# docker exec -it blob-express /bin/bash
+# docker stop blob-express ; docker run -d -i --rm -it -p 3012:3000 --cap-add=SYS_ADMIN --name blob-express blob-express
+# docker exec -it blob-express /bin/sh
 # docker logs --follow blob-express
 # mechanic add blob-express '--host=blob.gly.sh' '--backends=localhost:3012' '--canonical=true' '--https=true' '--redirect-to-https=true'

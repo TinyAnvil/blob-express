@@ -28,11 +28,7 @@ export default async function(req, res, next) {
         width: 0
       },
       seed,
-      guides: false,
-      puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-        executablePath: isDev ? undefined : '/usr/bin/chromium-browser'
-      }
+      guides: false
     })
 
     blob = blob
@@ -89,7 +85,11 @@ export default async function(req, res, next) {
   `
 
   const png = await convert(`<svg width="800" height="800" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`, {
-    background: 'white'
+    background: 'white',
+    puppeteer: {
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+      executablePath: isDev ? undefined : '/usr/bin/chromium-browser'
+    }
   })
 
   res.writeHead(200, {
