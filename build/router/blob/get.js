@@ -101,9 +101,7 @@ export default async function(req, res, next) {
 
   svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
 
-  // console.log(svg)
-
-  if (req.query.format === 'svg') {
+  if (req.url.indexOf('.svg') !== -1) {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
@@ -113,7 +111,7 @@ export default async function(req, res, next) {
     res.end(svg)
   }
 
-  else {
+  else if (req.url.indexOf('.png') !== -1) {
     const png = await convert(svg, {
       background: 'white',
       puppeteer: {

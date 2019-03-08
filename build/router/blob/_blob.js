@@ -4,9 +4,10 @@ import get from './get'
 
 const router = express.Router()
 
-router.get('/get', get)
+router.get('/blob.png', get)
+router.get('/blob.svg', get)
 
 export default {
-  root: '/blob',
+  root: '/',
   router
 }
