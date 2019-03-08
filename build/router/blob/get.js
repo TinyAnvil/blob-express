@@ -11,18 +11,23 @@ export default async function(req, res, next) {
 
   const title = req.query.title
   const subtitle = req.query.subtitle
+  const width = parseInt(req.query.w, 10) || 800
+  const height = parseInt(req.query.h, 10) || 600
+  const size = _.min([width, height]) * 2
 
-  _.each(_.range(2), (i) => {
-    const seed = req.query.seed ? shajs('sha256').update(req.query.seed + i).digest('hex') : null
+  _.each(_.range(4), (i) => {
+    const seed = shajs('sha256').update((req.query.seed || Math.random().toString()) + i).digest('hex')
 
     let blob = blobs({
-      size: 1200,
+      size,
       complexity: 0.4,
       contrast: 0.6,
+      // complexity: 0.000000001,
+      // contrast: 0,
       color: randomcolor({
         seed,
         format: 'rgba',
-        alpha: 1 / 2
+        alpha: i % 2 ? 1 / 2 : 1 / 4
       }),
       stroke: {
         color: 'none',
@@ -35,19 +40,27 @@ export default async function(req, res, next) {
     blob = blob
       .replace(/(<svg)([^<]*|[^>]*)/g, '')
       .replace(/<\/svg>/g, '')
+      .replace(/(<g)([^<]*|[^>]*)/g, '')
+      .replace(/<\/g>/g, '')
+
+    // translate(left-right, top-bottom)
 
     switch (i) {
       case 0:
-      blob = `<g transform="translate(-500, -500)"> ${blob} </g>`
+      blob = `<g transform="translate(${- size * 0.65}, ${- size * 0.10})"> ${blob} </g>`
       break;
 
       case 1:
-      blob = `<g transform="translate(100, -100)"> ${blob} </g>`
+      blob = `<g transform="translate(${- size * 0.45}, ${- size * 0.45})"> ${blob} </g>`
       break;
 
-      // case 2:
-      // blob = `<g transform="translate(50, 150)"> ${blob} </g>`
-      // break;
+      case 2:
+      blob = `<g transform="translate(${width - size * 0.40}, ${height - size * 0.65})"> ${blob} </g>`
+      break;
+
+      case 3:
+      blob = `<g transform="translate(${width - size * 0.55}, ${height - size * 0.45})"> ${blob} </g>`
+      break;
     }
 
     svg += blob
@@ -85,7 +98,9 @@ export default async function(req, res, next) {
     </text>
   `
 
-  svg = `<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
+  svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg"> ${svg} </svg>`
+
+  // console.log(svg)
 
   if (req.query.format === 'svg') {
     res.writeHead(200, {
