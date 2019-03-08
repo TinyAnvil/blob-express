@@ -20,8 +20,8 @@ export default async function(req, res, next) {
 
     let blob = blobs({
       size,
-      complexity: 0.4,
-      contrast: 0.6,
+      complexity: 0.3,
+      contrast: 0.5,
       // complexity: 0.000000001,
       // contrast: 0,
       color: randomcolor({
@@ -51,7 +51,7 @@ export default async function(req, res, next) {
       break;
 
       case 1:
-      blob = `<g transform="translate(${- size * 0.45}, ${- size * 0.45})"> ${blob} </g>`
+      blob = `<g transform="translate(${- size * 0.45}, ${- size * 0.55})"> ${blob} </g>`
       break;
 
       case 2:
