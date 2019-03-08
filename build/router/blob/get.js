@@ -16,7 +16,8 @@ export default async function(req, res, next) {
   const size = _.min([width, height]) * 2
 
   _.each(_.range(4), (i) => {
-    const seed = shajs('sha256').update((req.query.seed || Math.random().toString()) + i).digest('hex')
+    let seed = req.query.seed || Math.random().toString()
+        seed = shajs('sha256').update(seed + i).digest('hex')
 
     let blob = blobs({
       size,
